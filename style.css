@@ -1,0 +1,76 @@
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background: #fff6d5;
+  text-align: center;
+  overflow-x: hidden;
+}
+
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.hero h1 {
+  font-family: 'Pacifico', cursive;
+  font-size: 3rem;
+  color: #c94c4c;
+}
+
+.hero p {
+  max-width: 500px;
+  color: #555;
+}
+
+button {
+  margin-top: 20px;
+  padding: 12px 25px;
+  background: #f28c8c;
+  border: none;
+  border-radius: 30px;
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.memories {
+  padding: 60px 20px;
+}
+
+.memories h2 {
+  font-family: 'Pacifico', cursive;
+  color: #c94c4c;
+}
+
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+  max-width: 900px;
+  margin: auto;
+}
+
+.gallery img {
+  width: 100%;
+  border-radius: 15px;
+  transition: transform 0.3s;
+}
+
+.gallery img:hover {
+  transform: scale(1.05);
+}
+
+/* Floating hearts */
+.hearts::before {
+  content: "💗 💕 💖 💞";
+  position: fixed;
+  animation: float 6s linear infinite;
+}
+
+@keyframes float {
+  from { top: 100%; opacity: 1; }
+  to { top: -10%; opacity: 0; }
+}

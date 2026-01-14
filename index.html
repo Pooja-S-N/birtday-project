@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Happy Birthday Nithu 💖</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+/* ---------- GLOBAL ---------- */
+body{
+    margin:0;
+    font-family:'Segoe UI',sans-serif;
+    overflow:hidden;
+}
+.page{
+    width:100vw;
+    height:100vh;
+    display:none;
+    position:absolute;
+    top:0;left:0;
+}
+.page.active{display:flex; flex-direction:column; align-items:center; justify-content:center;}
+
+/* ---------- HEARTS ---------- */
+.hearts{
+    position:fixed;
+    top:0;left:0;
+    width:100%;height:100%;
+    pointer-events:none;
+    z-index:9999;
+}
+.heart{
+    position:absolute;
+    font-size:40px;
+    animation:floatUp linear forwards;
+}
+@keyframes floatUp{
+    from{transform:translateY(100vh);opacity:1;}
+    to{transform:translateY(-200px);opacity:0;}
+}
+
+/* ---------- PAGE 1 : CAKE ---------- */
+#page1{
+    background:radial-gradient(circle,#ffd6e8,#ff9aa2);
+    color:#fff;
+    text-align:center;
+}
+.cake{
+    width:350px;
+    height:350px;
+    background:#ff6f91;
+    border-radius:20px 20px 10px 10px;
+    position:relative;
+    box-shadow:0 20px 40px rgba(0,0,0,.3);
+    margin:20px;
+}
+.cake img{
+    width:100%;
+    height:100%;
+    object-fit:contain;
+}
+.candle{
+    width:20px;
+    height:60px;
+    background:white;
+    position:absolute;
+    top:-60px;
+    left:50%;
+    transform:translateX(-50%);
+}
+.flame{
+    width:20px;
+    height:20px;
+    background:orange;
+    border-radius:50%;
+    position:absolute;
+    top:-20px;
+    animation:flicker .2s infinite;
+}
+@keyframes flicker{
+    0%{transform:scale(1);}
+    50%{transform:scale(1.2);}
+    100%{transform:scale(1);}
+}
+button{
+    margin-top:30px;
+    padding:15px 30px;
+    font-size:18px;
+    border:none;
+    border-radius:30px;
+    background:linear-gradient(90deg,#ff4d6d,#ffb3c6);
+    color:white;
+    cursor:pointer;
+}
+
+/* ---------- PAGE 2 : WISHES ---------- */
+#page2{
+    background:linear-gradient(120deg,#ffe0f0,#ffb3d9);
+    text-align:center;
+    padding:20px;
+}
+#wishText{
+    font-size:2em;
+    color:#7d3b3b;
+    line-height:2;
+    font-weight:600;
+    max-width:90%;
+}
+
+/* ---------- PAGE 3 : SLIDESHOW ---------- */
+#page3{
+    background:linear-gradient(120deg,#ffdde1,#ee9ca7);
+    flex-direction:column;
+}
+#slideshow{
+    width:80%;
+    height:70%;
+    position:relative;
+    overflow:hidden;
+}
+.slide{
+    position:absolute;
+    width:100%;
+    height:100%;
+    object-fit:contain;
+    opacity:0;
+}
+.showLeft{animation:leftSlide 2s forwards;}
+.showRight{animation:rightSlide 2s forwards;}
+.showZoom{animation:zoom 2s forwards;}
+@keyframes leftSlide{from{transform:translateX(-100%);opacity:1;}to{transform:translateX(0);opacity:1;}}
+@keyframes rightSlide{from{transform:translateX(100%);opacity:1;}to{transform:translateX(0);opacity:1;}}
+@keyframes zoom{from{transform:scale(0.3);opacity:1;}to{transform:scale(1);opacity:1;}}
+#allImages{
+    display:none;
+    flex-wrap:wrap;
+    gap:15px;
+}
+#allImages img{
+    width:180px;
+    height:180px;
+    object-fit:cover;
+    border-radius:15px;
+}
+
+/* ---------- MUSIC BUTTON ---------- */
+#musicBtn{
+    position:fixed;
+    top:20px;
+    right:20px;
+    z-index:10000;
+    padding:10px 15px;
+    border-radius:20px;
+    background:#ff4d6d;
+    color:white;
+    border:none;
+    cursor:pointer;
+}
+</style>
+</head>
+<body>
+
+<!-- 🎵 Background Music -->
+<audio id="bgMusic" src="music/birthday.mp3" loop></audio>
+
+
+<button id="musicBtn">🔇 Play Music</button>
+
+<!-- Hearts -->
+<div class="hearts" id="hearts"></div>
+
+<!-- PAGE 1 -->
+<div class="page active" id="page1">
+    <h1>Happy Birthday Nithu 💖</h1>
+    <div class="cake">
+        <img src="Images/memories/img16.jpeg">
+        <div class="candle"><div class="flame"></div></div>
+    </div>
+    <button onclick="startMusic(); goToPage(2)">Start the Celebration 🎉</button>
+</div>
+
+<!-- PAGE 2 -->
+<div class="page" id="page2">
+    <div id="wishText"></div>
+    <button onclick="goToPage(1)">⬅ Previous</button>
+    <button onclick="goToPage(3)">Next ➡</button>
+</div>
+
+<!-- PAGE 3 -->
+<div class="page" id="page3">
+    <div id="slideshow"></div>
+    <div id="allImages"></div>
+    <button onclick="goToPage(2)">⬅ Previous</button>
+</div>
+
+<script>
+/* ---------- PAGE NAV ---------- */
+function goToPage(n){
+    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+    document.getElementById('page'+n).classList.add('active');
+    if(n===2) startWishAnimation();
+    if(n===3) startSlideshow();
+}
+
+/* ---------- HEARTS ---------- */
+function createHeart(){
+    const h=document.createElement('div');
+    h.className='heart';
+    h.textContent=['💖','🎉','✨'][Math.floor(Math.random()*3)];
+    h.style.left=Math.random()*100+'vw';
+    h.style.animationDuration=(3+Math.random()*3)+'s';
+    document.getElementById('hearts').appendChild(h);
+    setTimeout(()=>h.remove(),6000);
+}
+setInterval(createHeart,300);
+
+/* ---------- MUSIC ---------- */
+const music = document.getElementById("bgMusic");
+const musicBtn = document.getElementById("musicBtn");
+
+function startMusic(){
+    music.play();
+    musicBtn.textContent = "🔊 Pause Music";
+}
+
+musicBtn.addEventListener("click", ()=>{
+    if(music.paused){
+        music.play();
+        musicBtn.textContent="🔊 Pause Music";
+    }else{
+        music.pause();
+        musicBtn.textContent="🔇 Play Music";
+    }
+});
+
+/* ---------- WISH ANIMATION ---------- */
+const wishMessage="Happy Birthday Dooms 💖 You are my happiness, my peace, and my safest place. On your special day, I wish you endless smiles, good health, success, and all the love your heart can hold. Thank you for being you — today and always 💕Literally I want to share our memories but I would like to share your memories because its your birthday right dummuuuuu........ once again Happy Birthday my everything 💖. Lets see your memories, ok Enjoy! 🥰";
+let wordIndex=0;
+function startWishAnimation(){
+    const container=document.getElementById('wishText');
+    container.innerHTML='';
+    wordIndex=0;
+    function show(){
+        if(wordIndex<wishMessage.length){
+            container.innerHTML+=wishMessage[wordIndex++];
+            setTimeout(show,50);
+        }
+    }
+    show();
+}
+
+/* ---------- SLIDESHOW ---------- */
+const images=["img1","img2","img3","img4","img5","img6","img7","img9","img11","img12","img13","img14","img15","img16","img17","img18","img19","img20"]
+.map(i=>`Images/memories/${i}.jpeg`);
+let index=0;
+function startSlideshow(){
+    const box=document.getElementById('slideshow');
+    box.innerHTML='';
+    index=0;
+    function next(){
+        if(index>=images.length){
+            box.style.display='none';
+            const all=document.getElementById('allImages');
+            all.style.display='flex';
+            images.forEach(src=>{
+                const im=document.createElement('img');
+                im.src=src;
+                all.appendChild(im);
+            });
+            return;
+        }
+        const img=document.createElement('img');
+        img.src=images[index];
+        img.className='slide '+['showLeft','showRight','showZoom'][index%3];
+        box.appendChild(img);
+        setTimeout(()=>{box.innerHTML='';index++;next();},2200);
+    }
+    next();
+}
+</script>
+</body>
+</html>
